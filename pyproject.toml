@@ -1,0 +1,20 @@
+[project]
+name = "amd-qwen-image-21"
+description = "Free Qwen-Image 2.1 text-to-image through the AMD gateway. Register for an API key; no local GPU required."
+version = "1.0.0"
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+classifiers = ["Operating System :: OS Independent"]
+
+[project.urls]
+Repository = "https://github.com/wangxunx/ComfyUI-AMD-Qwen-Image-2.1"
+Documentation = "https://github.com/wangxunx/ComfyUI-AMD-Qwen-Image-2.1#readme"
+"Bug Tracker" = "https://github.com/wangxunx/ComfyUI-AMD-Qwen-Image-2.1/issues"
+
+[tool.comfy]
+PublisherId = "wangxunx"
+DisplayName = "ComfyUI-AMD-Qwen-Image-2.1"
+Icon = "https://raw.githubusercontent.com/wangxunx/ComfyUI-AMD-Qwen-Image-2.1/main/assets/icon.png"
+Banner = "https://raw.githubusercontent.com/wangxunx/ComfyUI-AMD-Qwen-Image-2.1/main/assets/banner.jpg"
+# nodes.py imports sync_op, which only exists from this release on.
+requires-comfyui = ">=0.3.67"

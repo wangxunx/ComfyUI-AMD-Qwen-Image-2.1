@@ -1,6 +1,8 @@
 # ComfyUI-AMD-Qwen-Image-2.1
 
-ComfyUI node for Qwen-Image 2.1 text-to-image generation through the AMD gateway.
+ComfyUI node for Qwen-Image 2.1 text-to-image generation through the AMD gateway. Both
+`Qwen-Image-2.1` and `Qwen-Image-2.1-Turbo` are supported, and the node's `model` input picks
+between them.
 
 ## Install
 
@@ -28,13 +30,28 @@ To point the node at a different gateway, set `H3_GATEWAY_BASE_URL`.
 
 | Node | Inputs |
 |---|---|
-| AMD Qwen Image 2.1 Text to Image | `prompt`, `aspect_ratio` (six ratios), `steps` (10-50) |
+| AMD Qwen Image 2.1 Text to Image | `prompt`, `aspect_ratio` (six ratios), `model`, `steps` (10-50, base model only) |
 
 Qwen-Image 2.1 on this gateway generates from text only, so the node takes no reference image. A prompt is required.
 
-Credits are charged in proportion to `steps`: 30 steps cost one credit, and more steps cost proportionally more.
+## Models
 
-A 1024x1024 image usually takes about 50 seconds. The first request at a resolution the backend has not served before takes noticeably longer because it compiles convolution kernels on the spot; that path is slow, not failing.
+One node serves both models; pick one with the `model` input.
+
+| Model | 1024x1024 | Steps |
+|---|---|---|
+| `Qwen-Image-2.1` | about 23 seconds | `steps` slider, 10-50 |
+| `Qwen-Image-2.1-Turbo` | about 13 seconds | fixed by the gateway |
+
+Both cost the same. Turbo runs at a step count the gateway pins, so the `steps` slider only appears for the base model.
+
+On the base model, credits are charged in proportion to `steps`: 30 steps cost one credit, and more steps cost proportionally more.
+
+The first request at a resolution the backend has not served before takes noticeably longer because it compiles convolution kernels on the spot; that path is slow, not failing.
+
+## Upgrading from 1.0.0
+
+The `model` input took the widget slot `steps` used to occupy, so a workflow saved with 1.0.0 loads its old step count into `model` and will not run. Open the node, pick a model again, and re-save. 2.0.0 also needs ComfyUI 0.4.0 or newer, which is when the dynamic input it uses was added.
 
 ## Example workflow
 

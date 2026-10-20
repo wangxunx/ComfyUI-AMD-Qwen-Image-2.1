@@ -38,7 +38,7 @@
       ],
       "size": [
         400,
-        260
+        300
       ],
       "flags": {},
       "order": 0,
@@ -59,6 +59,7 @@
       "widgets_values": [
         "A cozy corner bookshop at dusk, warm amber light spilling from the windows onto wet cobblestones. A hand-lettered chalkboard sign stands by the door, reading \"OPEN LATE\" in clean capitals. Rain-speckled glass reflects soft neon from across the street. Photorealistic, 35mm, shallow depth of field with the sign in sharp focus, rich cinematic color grading, subtle film grain.",
         "1:1",
+        "Qwen-Image-2.1",
         30
       ],
       "color": "#432",
@@ -82,7 +83,7 @@
       "bgcolor": "#653",
       "properties": {},
       "widgets_values": [
-        "## AMD Qwen Image 2.1 Text to Image\n\nRequires an account key. Register at https://h3.oneclickamd.ai, then configure it either way below. **One-time setup per machine** — it applies to every workflow:\n\n- Environment variable `H3_GATEWAY_API_KEY`\n- Or save the key to `h3_gateway_api_key.txt` in the ComfyUI user directory\n\nThe same key also works for the AMD MiniMax H3 video nodes, so configure it once.\n\nIf the key is missing, the node fails immediately and tells you the registration URL and the exact file path, so you never sit through a silent 401.\n\n**Your key is not in this workflow.** The node has no `api_key` widget, so the key is never written into the workflow JSON or embedded into exported image metadata. This workflow is safe to share.\n\nIf you run your own gateway, override the default address with `H3_GATEWAY_BASE_URL`.\n\n**Parameters:** `aspect_ratio` six ratios; `steps` 10-50, where 30 steps cost one credit and more steps cost proportionally more. A 1024x1024 image takes about 50 seconds."
+        "## AMD Qwen Image 2.1 Text to Image\n\nRequires an account key. Register at https://h3.oneclickamd.ai, then configure it either way below. **One-time setup per machine** — it applies to every workflow:\n\n- Environment variable `H3_GATEWAY_API_KEY`\n- Or save the key to `h3_gateway_api_key.txt` in the ComfyUI user directory\n\nThe same key also works for the AMD MiniMax H3 video nodes, so configure it once.\n\nIf the key is missing, the node fails immediately and tells you the registration URL and the exact file path, so you never sit through a silent 401.\n\n**Your key is not in this workflow.** The node has no `api_key` widget, so the key is never written into the workflow JSON or embedded into exported image metadata. This workflow is safe to share.\n\nIf you run your own gateway, override the default address with `H3_GATEWAY_BASE_URL`.\n\n**Parameters:** `aspect_ratio` six ratios; `model` picks between `Qwen-Image-2.1` and `Qwen-Image-2.1-Turbo`. Turbo costs the same and is about twice as fast, and runs at a step count the gateway pins, so the `steps` slider only appears for the base model. A 1024x1024 image takes about 23 seconds on the base model and 13 on Turbo."
       ]
     }
   ],

@@ -25,7 +25,8 @@ BASE_URL_ENV_VAR = "H3_GATEWAY_BASE_URL"
 API_KEY_ENV_VAR = "H3_GATEWAY_API_KEY"
 API_KEY_FILENAME = "h3_gateway_api_key.txt"
 REGISTRATION_URL = "https://h3.oneclickamd.ai"
-MODEL_NAME = "Qwen-Image-2.1"
+BASE_MODEL = "Qwen-Image-2.1"
+TURBO_MODEL = "Qwen-Image-2.1-Turbo"
 FAILED_STATUSES = ["failed", "cancelled"]
 
 
@@ -38,7 +39,7 @@ class TaskCreationRequest(BaseModel):
     model: str
     content: list[TextContent]
     aspect_ratio: str
-    steps: int
+    steps: int | None = None
 
 
 class TaskCreationResponse(BaseModel):
@@ -102,14 +103,27 @@ class AMDQwenImage21TextToImage(IO.ComfyNode):
                     default="1:1",
                     tooltip="Aspect ratio of the output image.",
                 ),
-                IO.Int.Input(
-                    "steps",
-                    default=30,
-                    min=10,
-                    max=50,
-                    step=1,
-                    display_mode=IO.NumberDisplay.slider,
-                    tooltip="Denoising steps (10-50). Credits are charged in proportion to steps, with 30 steps costing one credit.",
+                IO.DynamicCombo.Input(
+                    "model",
+                    options=[
+                        IO.DynamicCombo.Option(
+                            BASE_MODEL,
+                            [
+                                IO.Int.Input(
+                                    "steps",
+                                    default=30,
+                                    min=10,
+                                    max=50,
+                                    step=1,
+                                    display_mode=IO.NumberDisplay.slider,
+                                    tooltip="Denoising steps (10-50). Credits are charged in proportion to steps, "
+                                    "with 30 steps costing one credit.",
+                                )
+                            ],
+                        ),
+                        IO.DynamicCombo.Option(TURBO_MODEL, []),
+                    ],
+                    tooltip="Turbo is about twice as fast for the same price, at a step count fixed by the gateway.",
                 ),
             ],
             outputs=[IO.Image.Output()],
@@ -117,7 +131,7 @@ class AMDQwenImage21TextToImage(IO.ComfyNode):
         )
 
     @classmethod
-    async def execute(cls, prompt: str, aspect_ratio: str, steps: int) -> IO.NodeOutput:
+    async def execute(cls, prompt: str, aspect_ratio: str, model: dict) -> IO.NodeOutput:
         validate_string(prompt, min_length=1)
         root = resolve_base_url()
         headers = {"Authorization": f"Bearer {resolve_api_key()}"}
@@ -128,10 +142,11 @@ class AMDQwenImage21TextToImage(IO.ComfyNode):
             ApiEndpoint(path=f"{root}/v2/video_generation", method="POST", headers=headers),
             response_model=TaskCreationResponse,
             data=TaskCreationRequest(
-                model=MODEL_NAME,
+                model=model["model"],
                 content=[TextContent(text=prompt)],
                 aspect_ratio=aspect_ratio,
-                steps=steps,
+                # Turbo runs at a step count the gateway pins, so the field is left out entirely.
+                steps=model.get("steps"),
             ),
         )
         task_result = await poll_op(

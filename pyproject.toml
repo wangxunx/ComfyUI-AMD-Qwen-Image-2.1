@@ -1,6 +1,6 @@
 [project]
 name = "amd-qwen-image-21"
-description = "Free Qwen-Image 2.1 and 2.1 Turbo text-to-image through the AMD gateway. Register for an API key; no local GPU required."
+description = "Free Qwen-Image 2.1 and 2.1 Turbo text-to-image and image editing through the AMD gateway. Register for an API key; no local GPU required."
 version = "2.0.0"
 license = { file = "LICENSE" }
 requires-python = ">=3.10"

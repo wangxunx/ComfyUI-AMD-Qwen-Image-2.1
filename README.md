@@ -1,6 +1,6 @@
 # ComfyUI-AMD-Qwen-Image-2.1
 
-ComfyUI node for Qwen-Image 2.1 text-to-image generation through the AMD gateway. Both
+ComfyUI node for Qwen-Image 2.1 image generation and image editing through the AMD gateway. Both
 `Qwen-Image-2.1` and `Qwen-Image-2.1-Turbo` are supported, and the node's `model` input picks
 between them.
 
@@ -30,9 +30,14 @@ To point the node at a different gateway, set `H3_GATEWAY_BASE_URL`.
 
 | Node | Inputs |
 |---|---|
-| AMD Qwen Image 2.1 Text to Image | `prompt`, `aspect_ratio` (six ratios), `model`, `steps` (10-50, base model only) |
+| AMD Qwen Image 2.1 | `prompt`, `aspect_ratio` (six ratios), `model`, `steps` (10-50, base model only), `images` (0-3 reference images) |
 
-Qwen-Image 2.1 on this gateway generates from text only, so the node takes no reference image. A prompt is required.
+One node covers both tasks. Connect nothing to `images` and it generates from the prompt alone;
+connect one to three reference images and the same node edits them. A prompt is always required —
+with reference images it describes the edit.
+
+`aspect_ratio` applies to edits too: the output is reframed to it rather than keeping the shape of
+the reference images. Extra `image_N` sockets appear as you fill the existing ones, up to three.
 
 ## Models
 
@@ -43,7 +48,7 @@ One node serves both models; pick one with the `model` input.
 | `Qwen-Image-2.1` | about 23 seconds | `steps` slider, 10-50 |
 | `Qwen-Image-2.1-Turbo` | about 13 seconds | fixed by the gateway |
 
-Both cost the same. Turbo runs at a step count the gateway pins, so the `steps` slider only appears for the base model.
+Both cost the same, and both do text-to-image and editing. Turbo runs at a step count the gateway pins, so the `steps` slider only appears for the base model.
 
 On the base model, credits are charged in proportion to `steps`: 30 steps cost one credit, and more steps cost proportionally more.
 
@@ -53,9 +58,16 @@ The first request at a resolution the backend has not served before takes notice
 
 The `model` input took the widget slot `steps` used to occupy, so a workflow saved with 1.0.0 loads its old step count into `model` and will not run. Open the node, pick a model again, and re-save. 2.0.0 also needs ComfyUI 0.4.0 or newer, which is when the dynamic input it uses was added.
 
-## Example workflow
+The node is listed as `AMD Qwen Image 2.1` rather than `AMD Qwen Image 2.1 Text to Image`, since it no longer only does text to image.
 
-In ComfyUI, open the template browser from the left sidebar, scroll to the **EXTENSIONS** section, and pick `ComfyUI-AMD-Qwen-Image-2.1`. The `AMD Qwen Image 2.1 Text to Image` workflow runs as-is once your key is configured, and includes a note explaining the key setup.
+## Example workflows
+
+In ComfyUI, open the template browser from the left sidebar, scroll to the **EXTENSIONS** section, and pick `ComfyUI-AMD-Qwen-Image-2.1`. Both workflows run as-is once your key is configured, and each includes a note explaining the key setup.
+
+| Workflow | What it does |
+|---|---|
+| `AMD Qwen Image 2.1 Text to Image` | Generates from a prompt |
+| `AMD Qwen Image 2.1 Image Edit` | Edits the bundled `example.png` from a prompt |
 
 ## Your API key never enters a workflow
 

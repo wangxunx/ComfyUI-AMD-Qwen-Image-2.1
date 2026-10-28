@@ -6,6 +6,14 @@ between them.
 
 ## Install
 
+Search for `ComfyUI-AMD-Qwen-Image-2.1` in ComfyUI Manager, or install it from the registry:
+
+```bash
+comfy node install amd-qwen-image-21
+```
+
+To install from source instead:
+
 ```bash
 cd ComfyUI/custom_nodes
 git clone https://github.com/wangxunx/ComfyUI-AMD-Qwen-Image-2.1.git
@@ -17,14 +25,30 @@ Restart ComfyUI. No extra Python dependencies are required.
 
 Register at https://h3.oneclickamd.ai to get a key, then use either method below. This is a one-time setup per machine and applies to every workflow:
 
-- Set the `H3_GATEWAY_API_KEY` environment variable
-- Or save the key to `h3_gateway_api_key.txt` in the ComfyUI user directory
+- Save the key to `h3_gateway_api_key.txt` in the ComfyUI user directory
+- Or set the `H3_GATEWAY_API_KEY` environment variable
 
-If the key is missing, the node fails immediately and tells you the registration URL and the exact file path.
+The file is read on every run, so dropping it in takes effect without restarting. The environment variable is read from the server process, so changing it needs a restart.
+
+If the key is missing, the node fails immediately and tells you the registration URL and the exact file path it looked at.
 
 The gateway serves both its image and video models from one account, so a key already configured for [ComfyUI-AMD-MiniMaxH3](https://github.com/wangxunx/ComfyUI-AMD-MiniMaxH3) works here with no further setup.
 
 To point the node at a different gateway, set `H3_GATEWAY_BASE_URL`.
+
+### Windows, with the ComfyUI Desktop app
+
+Use the file rather than the environment variable. Desktop launches from the Start menu and does not inherit variables you set in a PowerShell or Command Prompt session, so setting one there has no effect. Making it stick would mean `setx` or the System Properties dialog plus a full restart of Desktop.
+
+Desktop keeps the user directory at `user` inside its install folder. That folder moves between Desktop versions and depends on what you picked during setup, so the reliable way to find it is to run the node once with no key: the error names the exact file it looked for. On one Windows install it is
+
+```
+C:\Users\<you>\AppData\Local\Comfy-Desktop\ComfyUI-Installs\ComfyUI\ComfyUI\user\h3_gateway_api_key.txt
+```
+
+Create the file there, paste the key, and save. Notepad's default encoding is fine.
+
+Two Windows details: if File Explorer hides known extensions, **New > Text Document** already ends in `.txt`, so do not type the extension again. And do not create the file with `echo your-key > h3_gateway_api_key.txt` in Windows PowerShell, which writes UTF-16 that the node cannot read.
 
 ## Node
 
